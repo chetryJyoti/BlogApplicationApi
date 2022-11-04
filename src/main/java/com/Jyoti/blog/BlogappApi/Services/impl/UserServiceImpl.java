@@ -5,6 +5,7 @@ import com.Jyoti.blog.BlogappApi.Exceptions.ResourceNotFoundException;
 import com.Jyoti.blog.BlogappApi.Payloads.UserDto;
 import com.Jyoti.blog.BlogappApi.Repositories.UserRepo;
 import com.Jyoti.blog.BlogappApi.Services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -59,15 +62,21 @@ public class UserServiceImpl implements UserService {
        this.userRepo.delete(user);
     }
 
+
+    //MANUALLY CONVERTING
     //converting dtoUser(from Payloads package) to User type
     public User dtoToUser(UserDto userDto){
-        User user = new User();
 
-        user.setId(userDto.getId());
-        user.setName(userDto.getName());
-        user.setPassword(userDto.getPassword());
-        user.setEmail(userDto.getEmail());
-        user.setAbout(userDto.getAbout());
+        //converting using ModelMapper
+        User user = this.modelMapper.map(userDto,User.class);
+
+        //Manually converting
+//        User user = new User();
+//        user.setId(userDto.getId());
+//        user.setName(userDto.getName());
+//        user.setPassword(userDto.getPassword());
+//        user.setEmail(userDto.getEmail());
+//        user.setAbout(userDto.getAbout());
 
         return user;
     }
@@ -75,13 +84,15 @@ public class UserServiceImpl implements UserService {
 
     //converting User to dtoUser type
     public UserDto userToDto(User user){
-        UserDto userDto =new UserDto();
 
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setPassword(user.getPassword());
-        userDto.setEmail(user.getEmail());
-        userDto.setAbout(user.getAbout());
+        UserDto userDto = this.modelMapper.map(user,UserDto.class);
+
+//        UserDto userDto =new UserDto();
+//        userDto.setId(user.getId());
+//        userDto.setName(user.getName());
+//        userDto.setPassword(user.getPassword());
+//        userDto.setEmail(user.getEmail());
+//        userDto.setAbout(user.getAbout());
 
         return userDto;
     }
