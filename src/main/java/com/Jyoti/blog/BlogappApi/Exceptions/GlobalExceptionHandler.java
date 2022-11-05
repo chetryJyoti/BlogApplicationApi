@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> resourceNotFoundExceptionHandler(ResourceNotFoundException ex){
         String msg = ex.getMessage();
         ApiResponse apiResponse = new ApiResponse(msg,false);
-        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
 
     //handling invalid data exception
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
             String msg = error.getDefaultMessage();
             resp.put(fieldName,msg);
         });
-        return new ResponseEntity<Map<String,String>>(resp,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(resp,HttpStatus.BAD_REQUEST);
     }
 
 
@@ -42,6 +42,6 @@ public class GlobalExceptionHandler {
     public  ResponseEntity<ApiResponse> methodNotSupportedException(HttpRequestMethodNotSupportedException ex){
         String msg = ex.getMessage();
         ApiResponse apiResponse = new ApiResponse(msg,false);
-        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity<>(apiResponse,HttpStatus.METHOD_NOT_ALLOWED);
     }
 }
