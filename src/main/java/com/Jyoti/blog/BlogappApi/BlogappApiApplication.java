@@ -10,7 +10,7 @@ public class BlogappApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BlogappApiApplication.class, args);
-		System.out.println("Server started");
+		System.out.println("------------------------------Server started------------------------------");
 	}
 
 	@Bean
