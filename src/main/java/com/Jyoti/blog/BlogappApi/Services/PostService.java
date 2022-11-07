@@ -2,6 +2,7 @@ package com.Jyoti.blog.BlogappApi.Services;
 
 import com.Jyoti.blog.BlogappApi.Entities.Post;
 import com.Jyoti.blog.BlogappApi.Payloads.PostDto;
+import com.Jyoti.blog.BlogappApi.Payloads.PostResponse;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface PostService {
     PostDto updatePost(PostDto postDto,Integer postId);
 
     //get all posts
-    List<PostDto> getAllPosts(Integer pageNumber,Integer pageSize);
+    PostResponse getAllPosts(Integer pageNumber, Integer pageSize,String sortBy);
 
     //get single post
     PostDto getPostById(Integer postId);

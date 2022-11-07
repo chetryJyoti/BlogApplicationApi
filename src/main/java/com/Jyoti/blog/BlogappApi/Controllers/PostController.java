@@ -1,8 +1,10 @@
 package com.Jyoti.blog.BlogappApi.Controllers;
 
-import com.Jyoti.blog.BlogappApi.Entities.Post;
+
+import com.Jyoti.blog.BlogappApi.Config.AppConstants;
 import com.Jyoti.blog.BlogappApi.Payloads.ApiResponse;
 import com.Jyoti.blog.BlogappApi.Payloads.PostDto;
+import com.Jyoti.blog.BlogappApi.Payloads.PostResponse;
 import com.Jyoti.blog.BlogappApi.Services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,11 +51,12 @@ public class PostController {
 
     //get all post
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts(
-            @RequestParam(value = "pageNumber",defaultValue = "1",required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize",defaultValue = "5",required = false) Integer pageSize
+    public ResponseEntity<PostResponse> getAllPosts(
+            @RequestParam(value = "pageNumber",defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize",defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy",defaultValue =AppConstants.SORT_BY, required = false) String sortBy
     ){
-        List<PostDto> allPosts = this.postService.getAllPosts(pageNumber,pageSize);
+        PostResponse allPosts = this.postService.getAllPosts(pageNumber,pageSize,sortBy);
         return new ResponseEntity<>(allPosts,HttpStatus.OK);
     }
 
@@ -76,6 +79,13 @@ public class PostController {
     public ResponseEntity<ApiResponse> deletePost(@PathVariable Integer postId){
         this.postService.deletePost(postId);
         return new ResponseEntity<>(new ApiResponse("Post deleted successfully",true),HttpStatus.OK);
+    }
+
+    //search post
+    @GetMapping("/posts/search/{keyword}")
+    public ResponseEntity<List<PostDto>> searchPost(@PathVariable String keyword){
+        List<PostDto> posts = this.postService.searchPosts(keyword);
+        return new ResponseEntity<>(posts,HttpStatus.OK);
     }
 
 
