@@ -53,23 +53,39 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post updatePost(PostDto postDto, Integer postId) {
-        return null;
+    public PostDto updatePost(PostDto postDto, Integer postId) {
+        Post post = this.postRepo.findById(postId)
+                .orElseThrow(()->new ResourceNotFoundException("Post","Post Id",postId));
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+        post.setImageLink(postDto.getImageLink());
+        Post updatedPost = this.postRepo.save(post);
+        return this.modelMapper.map(updatedPost,PostDto.class);
     }
 
     @Override
-    public List<Post> getAllPosts() {
-        return null;
+    public List<PostDto> getAllPosts() {
+        List<Post> posts = this.postRepo.findAll();
+        List<PostDto> allPosts = posts.stream().map((post) ->this.modelMapper.map(post,PostDto.class))
+                .collect(Collectors.toList());
+        return allPosts;
     }
 
     @Override
-    public Post getPostById(Integer postId) {
-        return null;
+    public PostDto getPostById(Integer postId) {
+        Post post = this.postRepo.findById(postId)
+                .orElseThrow(()->new ResourceNotFoundException("Post","Post Id",postId));
+        PostDto postDto = this.modelMapper.map(post,PostDto.class);
+        return postDto;
     }
 
     @Override
     public void deletePost(Integer postId) {
-
+        Post post = this.postRepo.findById(postId)
+                .orElseThrow(()->new ResourceNotFoundException("Post","Post Id",postId));
+        if(post != null){
+            this.postRepo.delete(post);
+        }
     }
 
     @Override
@@ -101,7 +117,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> searchPosts(String keyword) {
+    public List<PostDto> searchPosts(String keyword) {
         return null;
     }
 }
