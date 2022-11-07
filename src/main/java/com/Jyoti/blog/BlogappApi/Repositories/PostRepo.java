@@ -16,4 +16,8 @@ public interface PostRepo extends JpaRepository<Post,Integer> {
 
     //finding all post in a category
     List<Post> findByCategory(Category category);
+
+    List<Post> findByTitleContaining(String title);
+
+
 }
