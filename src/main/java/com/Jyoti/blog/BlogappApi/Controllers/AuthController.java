@@ -1,5 +1,6 @@
 package com.Jyoti.blog.BlogappApi.Controllers;
 
+import com.Jyoti.blog.BlogappApi.Exceptions.ApiException;
 import com.Jyoti.blog.BlogappApi.Payloads.JwtAuthRequest;
 import com.Jyoti.blog.BlogappApi.Payloads.JwtAuthResponse;
 import com.Jyoti.blog.BlogappApi.Security.JwtTokenHelper;
@@ -47,7 +48,7 @@ public class AuthController {
             this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         }catch (BadCredentialsException e){
             System.out.println("INVALID CREDENTIALS");
-            throw  new Exception("INVALID USERNAME OR PASSWORDS");
+            throw  new ApiException("INVALID USERNAME OR PASSWORD");
         }
 
     }

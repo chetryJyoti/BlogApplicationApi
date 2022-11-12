@@ -44,4 +44,12 @@ public class GlobalExceptionHandler {
         ApiResponse apiResponse = new ApiResponse(msg,false);
         return new ResponseEntity<>(apiResponse,HttpStatus.METHOD_NOT_ALLOWED);
     }
+
+    //handling invalid credentials exception
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ApiResponse> handleApiException(ApiException ex){
+        String msg = ex.getMessage();
+        ApiResponse apiResponse = new ApiResponse(msg,true);
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
 }
