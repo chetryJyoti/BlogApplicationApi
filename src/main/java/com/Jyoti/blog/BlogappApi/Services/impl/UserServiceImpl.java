@@ -1,16 +1,21 @@
 package com.Jyoti.blog.BlogappApi.Services.impl;
 
+import com.Jyoti.blog.BlogappApi.Config.AppConstants;
+import com.Jyoti.blog.BlogappApi.Entities.Role;
 import com.Jyoti.blog.BlogappApi.Entities.User;
 import com.Jyoti.blog.BlogappApi.Exceptions.ResourceNotFoundException;
 import com.Jyoti.blog.BlogappApi.Payloads.UserDto;
+import com.Jyoti.blog.BlogappApi.Repositories.RoleRepo;
 import com.Jyoti.blog.BlogappApi.Repositories.UserRepo;
 import com.Jyoti.blog.BlogappApi.Services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +25,30 @@ public class UserServiceImpl implements UserService {
     private UserRepo userRepo;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepo roleRepo;
+
+    @Override
+    public UserDto registerNewUser(UserDto userDto) {
+
+        //check if the user is already present
+            User newUser = new User();
+
+            User user1 = this.modelMapper.map(userDto,User.class);
+
+            //encode user password
+            user1.setPassword(this.passwordEncoder.encode(user1.getPassword()));
+            //set user role
+            Role role = this.roleRepo.findById(AppConstants.ROLE_NORMAL).get();
+            user1.getRoles().add(role);
+            newUser= this.userRepo.save(user1);
+
+        return this.modelMapper.map(newUser,UserDto.class);
+    }
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -64,7 +93,7 @@ public class UserServiceImpl implements UserService {
 
 
     //MANUALLY CONVERTING
-    //converting dtoUser(from Payloads package) to User type
+    // dtoUser(from Payloads package) to User type
     public User dtoToUser(UserDto userDto){
 
         //converting using ModelMapper

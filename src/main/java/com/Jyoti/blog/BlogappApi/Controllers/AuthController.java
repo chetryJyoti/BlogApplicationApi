@@ -3,7 +3,9 @@ package com.Jyoti.blog.BlogappApi.Controllers;
 import com.Jyoti.blog.BlogappApi.Exceptions.ApiException;
 import com.Jyoti.blog.BlogappApi.Payloads.JwtAuthRequest;
 import com.Jyoti.blog.BlogappApi.Payloads.JwtAuthResponse;
+import com.Jyoti.blog.BlogappApi.Payloads.UserDto;
 import com.Jyoti.blog.BlogappApi.Security.JwtTokenHelper;
+import com.Jyoti.blog.BlogappApi.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,8 @@ public class AuthController {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private UserService userService;
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -51,5 +55,12 @@ public class AuthController {
             throw  new ApiException("INVALID USERNAME OR PASSWORD");
         }
 
+    }
+
+    //register new user
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto){
+        UserDto registeredUser= this.userService.registerNewUser(userDto);
+        return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }
 }

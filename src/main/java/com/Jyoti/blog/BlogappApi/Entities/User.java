@@ -21,10 +21,10 @@ public class User  implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Column(name = "user_name",nullable = false,length = 100)
 
+    @Column(name = "user_name",nullable = false,unique = true)
     private String name;
-
+    @Column(unique = true)
     private String email;
 
     private String password;
